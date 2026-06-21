@@ -1,5 +1,6 @@
 'use client';
 
+// Igual estructura que MoodWidget: selección única, no múltiple
 const options = [
   { id: 'mainstream', label: 'Mainstream', desc: 'Hits populares' },
   { id: 'mixed', label: 'Mixto', desc: 'Un poco de todo' },
@@ -26,6 +27,8 @@ export default function PopularityWidget({ selected, onChange }) {
               textAlign: 'left'
             }}
           >
+            /* Dentro de un mismo botón mostramos dos textos con distinto
+                estilo: el título (más visible) y la descripción (más apagada) */
             <div style={{ fontWeight: 500, color: selected?.id === opt.id ? '#8FBF7A' : '#C8DCC0' }}>{opt.label}</div>
             <div style={{ fontSize: '0.75rem', color: '#6B7A66' }}>{opt.desc}</div>
           </button>
