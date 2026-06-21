@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { getAccessToken } from '@/lib/auth';
 
+// Es casi idéntico a ArtistWidget, cambia el endpoint (type=track en vez de
+// type=artist) y los campos que mostramos (canción + artista en vez de solo artista)
 export default function TrackWidget({ selected, onChange }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -16,6 +18,8 @@ export default function TrackWidget({ selected, onChange }) {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     const data = await res.json();
+    // Aquí es "tracks.items" en vez de "artists.items", porque la respuesta
+    // de Spotify organiza los resultados según el tipo de búsqueda (type=track)
     setResults(data.tracks?.items || []);
     setLoading(false);
   };
@@ -52,9 +56,13 @@ export default function TrackWidget({ selected, onChange }) {
               border: selected.find(t => t.id === track.id) ? '1px solid #7FA86B' : '1px solid #2E3B2A'
             }}
           >
+            /* track.album.images, porque la portada de una canción viene
+                dentro de los datos de su álbum, no de la canción directamente */
             {track.album?.images?.[0] && <img src={track.album.images[0].url} alt={track.name} style={{ width: '36px', height: '36px', borderRadius: '4px', objectFit: 'cover' }} />}
             <div>
               <p style={{ color: selected.find(t => t.id === track.id) ? '#10180D' : '#C8DCC0', fontSize: '0.9rem', margin: 0 }}>{track.name}</p>
+              /* track.artists es un ARRAY porque una canción puede tener
+                  varios artistas (colaboraciones). Mostramos solo el primero */
               <p style={{ color: selected.find(t => t.id === track.id) ? '#1A2614' : '#6B7A66', fontSize: '0.75rem', margin: 0 }}>{track.artists?.[0]?.name}</p>
             </div>
           </div>
